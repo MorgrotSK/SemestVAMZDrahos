@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.semestdrahosvamz.ui.screens.bookEntry.BookEntryScreen
 import com.example.semestdrahosvamz.ui.screens.bookEntry.BookEntryScreenDestination
 import com.example.semestdrahosvamz.ui.screens.details.BookDetailsScreenDestination
 import com.example.semestdrahosvamz.ui.screens.library.LibraryScreen
@@ -18,6 +19,9 @@ fun LibraryNavHost(navController: NavHostController, modifier: Modifier = Modifi
                navigateToBookDetails = {navController.navigate("${BookDetailsScreenDestination.route}/${it}") },
                navigateToBookEntry = {navController.navigate(BookEntryScreenDestination.route)}
            )
+        }
+        composable(route = BookEntryScreenDestination.route) {
+            BookEntryScreen(navigateBack = {navController.popBackStack()})
         }
     }
 

@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookEntryScreen() {
+fun BookEntryScreen(navigateBack: () -> Unit,) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -27,7 +27,7 @@ fun BookEntryScreen() {
                     Text(text = "Place holder add book")
                 },
                 navigationIcon = {
-                    IconButton(onClick = { /* Handle navigation icon click */ }) {
+                    IconButton(onClick = navigateBack) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
                 },
