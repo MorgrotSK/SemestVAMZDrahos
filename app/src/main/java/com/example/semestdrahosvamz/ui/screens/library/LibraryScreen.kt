@@ -17,8 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,17 +24,6 @@ import androidx.compose.ui.unit.dp
 import com.example.semestdrahosvamz.Data.Book
 import com.example.semestdrahosvamz.ui.ViewModelProvider
 import com.example.semestdrahosvamz.ui.theme.SemestDrahosVAMZTheme
-
-
-@Preview(showBackground = true)
-@Composable
-fun LibraryScreenPreview() {
-    SemestDrahosVAMZTheme {
-        LibraryScreen()
-    }
-}
-
-
 
 @Composable
 fun BookGrid(
@@ -63,7 +50,9 @@ fun ShowBook(book: Book) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LibraryScreen(
-    viewModel: LibraryViewModel = viewModel(factory = ViewModelProvider.Factory)
+    viewModel: LibraryViewModel = viewModel(factory = ViewModelProvider.Factory),
+    navigateToBookDetails: (Int) -> Unit,
+    navigateToBookEntry: () -> Unit,
 ) {
     //val uiState by viewModel.libraryUiState.collectAsState()
 

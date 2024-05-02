@@ -11,8 +11,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
 import com.example.semestdrahosvamz.Data.AppContainer
 import com.example.semestdrahosvamz.Data.AppDataContainer
+import com.example.semestdrahosvamz.ui.navigation.LibraryNavHost
 import com.example.semestdrahosvamz.ui.screens.library.LibraryScreen
 import com.example.semestdrahosvamz.ui.theme.SemestDrahosVAMZTheme
 
@@ -26,7 +28,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    LibraryScreen()
+                    LibraryNavHost(navController = rememberNavController())
                 }
             }
         }
