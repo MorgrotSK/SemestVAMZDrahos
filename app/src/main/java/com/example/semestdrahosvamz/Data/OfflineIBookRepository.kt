@@ -23,7 +23,7 @@ class OfflineIBookRepository(private val itemDao: BookDao) : BookRepository{
 
     override fun getItemStream(id: Int): Flow<Book?> = itemDao.getItem(id)
 
-    override suspend fun insertItem(item: Book) = itemDao.insert(item)
+    override suspend fun insertItem(item: Book) : Long = itemDao.insert(item)
 
     override suspend fun deleteItem(item: Book) = itemDao.delete(item)
 

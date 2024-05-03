@@ -16,7 +16,7 @@ interface BookRepository {
     /**
      * Insert item in the data source
      */
-    suspend fun insertItem(item: Book)
+    suspend fun insertItem(item: Book) : Long
 
     /**
      * Delete item from the data source

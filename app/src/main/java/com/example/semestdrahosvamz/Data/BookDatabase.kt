@@ -33,7 +33,7 @@ abstract class BookDatabase : RoomDatabase() {
         fun getDatabase(context: Context): BookDatabase {
             // if the Instance is not null, return it, otherwise create a new database instance.
             return Instance ?: synchronized(this) {
-                Room.databaseBuilder(context, BookDatabase::class.java, "book_database2")
+                Room.databaseBuilder(context, BookDatabase::class.java, "book_database_new")
                     .build().also { Instance = it }
             }
         }

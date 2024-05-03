@@ -1,9 +1,14 @@
 package com.example.semestdrahosvamz.ui.screens.library
 
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -22,15 +27,23 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.pointer.PointerIcon.Companion.Text
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.semestdrahosvamz.Data.Book
 import com.example.semestdrahosvamz.ui.ViewModelProvider
 import com.example.semestdrahosvamz.ui.theme.SemestDrahosVAMZTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun BookGrid(
@@ -48,6 +61,10 @@ fun BookGrid(
 
 @Composable
 fun ShowBook(book: Book) {
+    val bitmap = remember(book.imageUri) { mutableStateOf<Bitmap?>(null) }
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+
     Card( modifier = Modifier
         .fillMaxWidth()
         .padding(8.dp),
@@ -55,6 +72,24 @@ fun ShowBook(book: Book) {
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
+            if (book.imageUri != "") {
+                // Use LaunchedEffect to trigger decoding only when bookImageUri changes
+                LaunchedEffect(book.imageUri) {
+                    coroutineScope.launch(Dispatchers.IO) {
+                        val source = ImageDecoder.createSource(context.contentResolver, Uri.parse(book.imageUri))
+                        bitmap.value = ImageDecoder.decodeBitmap(source)
+                    }
+                }
+
+                bitmap.value?.let { btm ->
+                    Image(
+                        bitmap = btm.asImageBitmap(),
+                        contentDescription = null,
+                        modifier = Modifier.size(400.dp)
+                    )
+                }
+            }
+
             Text(
                 text = book.title,
                 textAlign = TextAlign.Center

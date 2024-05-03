@@ -18,7 +18,7 @@ object ViewModelProvider {
             LibraryViewModel(inventoryApplication().container.bookRepository)
         }
         initializer {
-            BookEntryViewModel(inventoryApplication().container.bookRepository)
+            BookEntryViewModel(inventoryApplication().container.bookRepository, inventoryApplication())
         }
 
     }
