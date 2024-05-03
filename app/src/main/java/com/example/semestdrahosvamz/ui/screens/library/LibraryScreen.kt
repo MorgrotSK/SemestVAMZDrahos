@@ -22,6 +22,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerIcon.Companion.Text
 import androidx.compose.ui.text.style.TextAlign
@@ -46,8 +48,18 @@ fun BookGrid(
 
 @Composable
 fun ShowBook(book: Book) {
-    Card() {
-        Text(text = book.title)
+    Card( modifier = Modifier
+        .fillMaxWidth()
+        .padding(8.dp),
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text(
+                text = book.title,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }
 
@@ -59,7 +71,7 @@ fun LibraryScreen(
     navigateToBookDetails: (Int) -> Unit,
     navigateToBookEntry: () -> Unit,
 ) {
-    //val uiState by viewModel.libraryUiState.collectAsState()
+    val uiState by viewModel.libraryUiState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -99,7 +111,7 @@ fun LibraryScreen(
                 .padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            //BookGrid(bookList = uiState.bookList)
+            BookGrid(bookList = uiState.bookList)
         }
     }
 }

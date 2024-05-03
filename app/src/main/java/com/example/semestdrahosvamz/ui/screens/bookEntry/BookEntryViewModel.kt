@@ -1,5 +1,6 @@
 package com.example.semestdrahosvamz.ui.screens.bookEntry
 
+import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -13,8 +14,8 @@ class BookEntryViewModel(private val bookRepository: BookRepository) : ViewModel
     var bookEntryUIState by mutableStateOf(BookEntryUIState())
         private set
 
-    fun updateState(title : String, link : String) {
-        bookEntryUIState = BookEntryUIState(title, link)
+    fun updateState(title : String, link : String, imageUri : Uri) {
+        bookEntryUIState = BookEntryUIState(title, link, imageUri)
     }
     suspend fun saveBook() {
         bookRepository.insertItem(bookEntryUIState.getBook())

@@ -1,5 +1,6 @@
 package com.example.semestdrahosvamz.Data
 
+import android.net.Uri
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -8,4 +9,5 @@ data class Book(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val title: String,
     val link : String,
+    val imageUri : String,
 )
