@@ -6,14 +6,19 @@ import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,8 +27,11 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
@@ -33,7 +41,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.pointer.PointerIcon.Companion.Text
 import androidx.compose.ui.platform.LocalContext
@@ -67,13 +77,15 @@ fun ShowBook(book: Book) {
 
     Card( modifier = Modifier
         .fillMaxWidth()
-        .padding(8.dp),
+        .padding(8.dp)
+        .height(210.dp)
+        .width(210.dp),
+
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(8.dp)
         ) {
             if (book.imageUri != "") {
-                // Use LaunchedEffect to trigger decoding only when bookImageUri changes
                 LaunchedEffect(book.imageUri) {
                     coroutineScope.launch(Dispatchers.IO) {
                         val source = ImageDecoder.createSource(context.contentResolver, Uri.parse(book.imageUri))
@@ -85,18 +97,58 @@ fun ShowBook(book: Book) {
                     Image(
                         bitmap = btm.asImageBitmap(),
                         contentDescription = null,
-                        modifier = Modifier.size(400.dp)
+                        modifier = Modifier
+                            .height(175.dp)
+                            .width(150.dp)
                     )
                 }
             }
 
             Text(
                 text = book.title,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun LibraryScreenTopBar(
+    onSearchType: (String) -> Unit,
+    searchValue: String,
+) {
+    TopAppBar(
+        colors = topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            titleContentColor = MaterialTheme.colorScheme.primary,
+        ),
+        title = {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = "Search",
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                Spacer(Modifier.width(8.dp))
+                TextField(
+                    value = searchValue,
+                    onValueChange = { value -> onSearchType(value)},
+                    singleLine = true,
+                    colors = TextFieldDefaults.textFieldColors(
+                        containerColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent
+                    ),
+                    placeholder = { Text("Search") },
+                    modifier = Modifier.width(200.dp)
+                )
+            }
+        }
+    )
+}
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -110,15 +162,7 @@ fun LibraryScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                colors = topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                ),
-                title = {
-                    Text(text = "Top app bar")
-                }
-            )
+            LibraryScreenTopBar(viewModel::updateFilter, uiState.searchValue)
         },
         bottomBar = {
             BottomAppBar(
@@ -146,7 +190,10 @@ fun LibraryScreen(
                 .padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            BookGrid(bookList = uiState.bookList)
+            val filteredBooks = uiState.bookList.filter {
+                it.title.contains(uiState.searchValue, ignoreCase = true)
+            }
+            BookGrid(bookList = filteredBooks)
         }
     }
 }
