@@ -4,10 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.semestdrahosvamz.Data.BookRepository
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 
@@ -28,4 +24,8 @@ class LibraryViewModel(bookRepository: BookRepository) : ViewModel(){
     fun updateFilter(searchValue: String) {
         libraryUiState.value = libraryUiState.value.copy(searchValue = searchValue)
     }
+    fun setCategories(planned : Boolean, reading : Boolean, finished : Boolean) {
+        libraryUiState.value = libraryUiState.value.copy(reading = reading, planned = planned, finished = finished)
+    }
+
 }

@@ -161,7 +161,6 @@ fun SelectImage(
         Spacer(modifier = Modifier.height(12.dp))
 
         if (bookImageUri != Uri.EMPTY) {
-            // Use LaunchedEffect to trigger decoding only when bookImageUri changes
             LaunchedEffect(bookImageUri) {
                 coroutineScope.launch(Dispatchers.IO) {
                     val source = ImageDecoder.createSource(context.contentResolver, bookImageUri)

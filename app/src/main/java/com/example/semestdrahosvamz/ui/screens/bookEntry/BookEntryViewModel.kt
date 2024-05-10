@@ -32,7 +32,7 @@ class BookEntryViewModel(private val bookRepository: BookRepository, private val
         val newUri = saveImageLocally(bookEntryUIState.imageUri, bookId)
         Log.d("SaveBook", "New URI: $newUri")
 
-        val updatedBook = bookEntryUIState.getBook().copy(imageUri = newUri.toString(), id =  bookId)
+        val updatedBook = bookEntryUIState.getBook().copy(imageUri = newUri.toString(), id =  bookId, status = 1)
         bookRepository.updateItem(updatedBook)
         updateState(updatedBook.title, updatedBook.link, newUri)
         Log.d("SaveBook", "Book updated in repository with new URI")

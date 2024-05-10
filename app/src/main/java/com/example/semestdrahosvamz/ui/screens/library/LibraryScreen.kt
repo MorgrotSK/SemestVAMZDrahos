@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 
 import androidx.compose.material3.FloatingActionButton
@@ -149,6 +150,41 @@ fun LibraryScreenTopBar(
     )
 }
 
+@Composable
+fun LibraryBottomBar(
+    onCategoryChange: (Boolean, Boolean, Boolean) -> Unit,
+    planned: Boolean,
+    reading: Boolean,
+    finished: Boolean,
+) {
+    BottomAppBar(
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        contentColor = MaterialTheme.colorScheme.primary,
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            CheckboxWithLabel("Finished", finished) { isChecked -> onCategoryChange(planned, reading, isChecked) }
+            CheckboxWithLabel("Reading", reading) { isChecked -> onCategoryChange(planned, isChecked, finished) }
+            CheckboxWithLabel("Planned", planned) { isChecked -> onCategoryChange(isChecked, reading, finished) }
+        }
+    }
+}
+
+@Composable
+fun CheckboxWithLabel(label: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Checkbox(
+            checked = checked,
+            onCheckedChange = { isChecked -> onCheckedChange(isChecked)            }
+        )
+        Text(text = label, style = MaterialTheme.typography.bodyMedium)
+    }
+}
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -165,17 +201,7 @@ fun LibraryScreen(
             LibraryScreenTopBar(viewModel::updateFilter, uiState.searchValue)
         },
         bottomBar = {
-            BottomAppBar(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                contentColor = MaterialTheme.colorScheme.primary,
-            ) {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    text = "Bottom app bar",
-                )
-            }
+           LibraryBottomBar(viewModel::setCategories, uiState.planned, uiState.reading, uiState.finished)
         },
         floatingActionButton = {
             FloatingActionButton(
@@ -191,7 +217,7 @@ fun LibraryScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             val filteredBooks = uiState.bookList.filter {
-                it.title.contains(uiState.searchValue, ignoreCase = true)
+                it.title.contains(uiState.searchValue, ignoreCase = true) && ((uiState.reading && it.status == 1) || (uiState.planned && it.status == 2) || (uiState.finished && it.status == 0))
             }
             BookGrid(bookList = filteredBooks)
         }
