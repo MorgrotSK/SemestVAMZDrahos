@@ -5,7 +5,9 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -15,12 +17,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -29,9 +30,11 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
@@ -45,7 +48,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun BookBaseInfo(book: Book, innerPadding: PaddingValues) {
+fun BookBaseInfo(book: Book, innerPadding: PaddingValues, onStatusChange : (Int) -> Unit) {
     val bitmap = remember(book.imageUri) { mutableStateOf<Bitmap?>(null) }
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -76,13 +79,40 @@ fun BookBaseInfo(book: Book, innerPadding: PaddingValues) {
                     )
                 }
             }
+            Column(modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .padding(horizontal = 16.dp)
+            ) {
+                Text(
+                    text = book.title,
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 16.dp)
+                )
+                ReadingStatusOptions(selectedOption = book.status, onOptionSelected = onStatusChange)
+            }
+
+        }
+    }
+}
+
+@Composable
+fun ReadingStatusOptions(selectedOption: Int, onOptionSelected: (Int) -> Unit) {
+    val options = listOf("Finished", "Reading", "Planned")
+    options.forEachIndexed { index, text ->
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            RadioButton(
+                selected = text == options[selectedOption],
+                onClick = { onOptionSelected(index) }
+            )
             Text(
-                text = book.title,
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier
-                    .weight(1f)
-                    .align(Alignment.CenterVertically)
-                    .padding(horizontal = 16.dp)
+                text = text,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.clickable { onOptionSelected(index) }
             )
         }
     }
@@ -114,6 +144,6 @@ fun BookDetailsScreen(navigateBack: () -> Unit, viewModel: BookDetailsViewModel 
             )
         },
 
-    ) { innerPadding -> BookBaseInfo(book = uiState.value.book, innerPadding = innerPadding)
+    ) { innerPadding -> BookBaseInfo(book = uiState.value.book, innerPadding = innerPadding, viewModel::updateReadingStatus)
     }
 }

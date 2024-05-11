@@ -11,7 +11,7 @@ interface BookRepository {
     /**
      * Retrieve an item from the given data source that matches with the [id].
      */
-    fun getItemStream(id: Int): Flow<Book?>
+    fun getItemStream(id: Int): Flow<Book>
 
     /**
      * Insert item in the data source

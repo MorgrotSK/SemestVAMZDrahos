@@ -1,4 +1,4 @@
-package com.example.semestdrahosvamz.ui.screens.library
+package com.example.semestdrahosvamz.ui.screens.bookEntry
 
 import android.net.Uri
 import com.example.semestdrahosvamz.Data.Book
