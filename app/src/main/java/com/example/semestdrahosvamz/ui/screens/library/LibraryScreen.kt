@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -59,19 +60,20 @@ import kotlinx.coroutines.launch
 @Composable
 fun BookGrid(
     bookList: List<Book>,
+    onBookClick: (Book) -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 128.dp)
     ) {
         items(items = bookList, key = { it.id }) { book ->
-            ShowBook(book = book)
+            ShowBook(book = book, onBookClick)
         }
     }
 
 }
 
 @Composable
-fun ShowBook(book: Book) {
+fun ShowBook(book: Book, onBookClick: (Book) -> Unit) {
     val bitmap = remember(book.imageUri) { mutableStateOf<Bitmap?>(null) }
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -80,7 +82,8 @@ fun ShowBook(book: Book) {
         .fillMaxWidth()
         .padding(8.dp)
         .height(210.dp)
-        .width(210.dp),
+        .width(210.dp)
+        .clickable { onBookClick(book) },
 
     ) {
         Column(
@@ -191,7 +194,7 @@ fun CheckboxWithLabel(label: String, checked: Boolean, onCheckedChange: (Boolean
 @Composable
 fun LibraryScreen(
     viewModel: LibraryViewModel = viewModel(factory = ViewModelProvider.Factory),
-    navigateToBookDetails: (Int) -> Unit,
+    navigateToBookDetails: (Book) -> Unit,
     navigateToBookEntry: () -> Unit,
 ) {
     val uiState by viewModel.libraryUiState.collectAsState()
@@ -219,7 +222,7 @@ fun LibraryScreen(
             val filteredBooks = uiState.bookList.filter {
                 it.title.contains(uiState.searchValue, ignoreCase = true) && ((uiState.reading && it.status == 1) || (uiState.planned && it.status == 2) || (uiState.finished && it.status == 0))
             }
-            BookGrid(bookList = filteredBooks)
+            BookGrid(bookList = filteredBooks, navigateToBookDetails)
         }
     }
 }

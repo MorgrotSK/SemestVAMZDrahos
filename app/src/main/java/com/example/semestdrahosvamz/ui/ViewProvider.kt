@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.semestdrahosvamz.LibraryApplication
 import com.example.semestdrahosvamz.ui.screens.bookEntry.BookEntryViewModel
+import com.example.semestdrahosvamz.ui.screens.details.BookDetailsViewModel
 import com.example.semestdrahosvamz.ui.screens.library.LibraryViewModel
 
 
@@ -19,6 +20,9 @@ object ViewModelProvider {
         }
         initializer {
             BookEntryViewModel(inventoryApplication().container.bookRepository, inventoryApplication())
+        }
+        initializer {
+            BookDetailsViewModel(inventoryApplication().container.bookRepository, inventoryApplication())
         }
 
     }

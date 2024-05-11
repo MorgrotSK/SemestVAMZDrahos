@@ -4,4 +4,5 @@ import com.example.semestdrahosvamz.ui.navigation.NavigationDestination
 
 object BookEntryScreenDestination : NavigationDestination {
     override val route: String = "bookEntry"
+
 }
