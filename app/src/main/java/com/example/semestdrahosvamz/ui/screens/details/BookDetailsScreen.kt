@@ -45,19 +45,20 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun BookBaseInfo(book: Book, innerPadding : PaddingValues) {
+fun BookBaseInfo(book: Book, innerPadding: PaddingValues) {
     val bitmap = remember(book.imageUri) { mutableStateOf<Bitmap?>(null) }
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
-
+    val imageSize = 225.dp
 
     Surface(modifier = Modifier.padding(innerPadding)) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .fillMaxHeight(0.5f)
                 .background(color = MaterialTheme.colorScheme.surfaceVariant)
         ) {
-            if (book.imageUri != "") {
+            if (book.imageUri.isNotEmpty()) {
                 LaunchedEffect(book.imageUri) {
                     coroutineScope.launch(Dispatchers.IO) {
                         val source = ImageDecoder.createSource(context.contentResolver, Uri.parse(book.imageUri))
@@ -68,18 +69,16 @@ fun BookBaseInfo(book: Book, innerPadding : PaddingValues) {
                 bitmap.value?.let { btm ->
                     Image(
                         bitmap = btm.asImageBitmap(),
-                        contentDescription = null,
+                        contentDescription = "",
                         modifier = Modifier
-                            .height(175.dp)
-                            .width(150.dp)
+                            .fillMaxHeight(0.85f)
+                            .width(imageSize)
                     )
                 }
             }
-
-
             Text(
                 text = book.title,
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier
                     .weight(1f)
                     .align(Alignment.CenterVertically)
@@ -88,6 +87,8 @@ fun BookBaseInfo(book: Book, innerPadding : PaddingValues) {
         }
     }
 }
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -112,28 +113,7 @@ fun BookDetailsScreen(navigateBack: () -> Unit, viewModel: BookDetailsViewModel 
                 ),
             )
         },
-        bottomBar = {
-            BottomAppBar(
-                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    IconButton(onClick = {
-                        coroutineScope.launch {
-                            navigateBack()
-                        }
-                    },
-                    ) {
-                        Icon(Icons.Default.Done,  contentDescription = "Save thew new book")
-                    }
-                }
-            }
-        }
+
     ) { innerPadding -> BookBaseInfo(book = uiState.value.book, innerPadding = innerPadding)
     }
 }
