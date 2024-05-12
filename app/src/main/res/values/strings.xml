@@ -7,4 +7,5 @@
     <string name="readingStatusFinished">Finished</string>
     <string name="readingStatusReading">Reading</string>
     <string name="readingStatusPlanned">Planned</string>
+    <string name="notesSectionTitles">Notes</string>
 </resources>
