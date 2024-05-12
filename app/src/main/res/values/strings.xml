@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">SemestDrahosVAMZ</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="delDiaTitle">Are you sure?</string>
+    <string name="delDiaText">Do you really want to delete this book? The operations is ireversible!</string>
+    <string name="readingStatusFinished">Finished</string>
+    <string name="readingStatusReading">Reading</string>
+    <string name="readingStatusPlanned">Planned</string>
 </resources>
