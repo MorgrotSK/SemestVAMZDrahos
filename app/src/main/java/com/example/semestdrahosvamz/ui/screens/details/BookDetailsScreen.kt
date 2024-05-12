@@ -16,8 +16,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -118,14 +121,15 @@ fun ReadingStatusOptions(selectedOption: Int, onOptionSelected: (Int) -> Unit) {
     }
 }
 
-
+fun OnDeletion(navigateBack: () -> Unit) {
+    navigateBack
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookDetailsScreen(navigateBack: () -> Unit, viewModel: BookDetailsViewModel = viewModel(factory = ViewModelProvider.Factory)) {
-
-    val uiState = viewModel.uiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
+    val uiState = viewModel.uiState.collectAsState()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -142,6 +146,17 @@ fun BookDetailsScreen(navigateBack: () -> Unit, viewModel: BookDetailsViewModel 
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    coroutineScope.launch {
+                        viewModel.deleteBook()
+                        navigateBack()
+                    }},
+            ) {
+                Icon(Icons.Filled.Delete, "")
+            }
         },
 
     ) { innerPadding -> BookBaseInfo(book = uiState.value.book, innerPadding = innerPadding, viewModel::updateReadingStatus)
