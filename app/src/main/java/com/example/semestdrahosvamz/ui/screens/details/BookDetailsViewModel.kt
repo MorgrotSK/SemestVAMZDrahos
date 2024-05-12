@@ -19,7 +19,7 @@ class BookDetailsViewModel (savedStateHandle: SavedStateHandle, private val book
                 if (book != null) {
                     uiState.value = BookDetailsUiState(book = book)
                 } else {
-                    uiState.value = BookDetailsUiState(book = Book(0, "", "", "", 1))
+                    uiState.value = BookDetailsUiState(book = Book(0, "", "", "", 1, ""))
                 }
 
             }

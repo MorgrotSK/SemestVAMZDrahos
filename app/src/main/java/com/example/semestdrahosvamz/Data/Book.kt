@@ -11,4 +11,5 @@ data class Book(
     val link : String,
     val imageUri : String,
     val status : Int,
+    val notes : String,
 )

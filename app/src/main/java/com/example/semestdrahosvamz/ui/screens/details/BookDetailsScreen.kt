@@ -64,7 +64,7 @@ fun BookNotesSection(book: Book) {
             )
             Divider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f), thickness = 1.dp, modifier = Modifier.padding(vertical = 8.dp))
             Text(
-                text = "abaca dabaca ecece",
+                text = book .notes,
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.fillMaxWidth()
             )

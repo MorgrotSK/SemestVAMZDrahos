@@ -10,6 +10,7 @@ data class BookEntryUIState(var title : String = "", var link : String = "", var
             link = link,
             imageUri = imageUri.toString(),
             status = 1,
+            notes = "",
         )
     }
 };
