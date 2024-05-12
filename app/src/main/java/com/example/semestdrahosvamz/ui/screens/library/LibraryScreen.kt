@@ -210,7 +210,7 @@ fun LibraryScreen(
             FloatingActionButton(
                 onClick = navigateToBookEntry,
             ) {
-                Icon(Icons.Filled.Add, "Placeholder button desc")
+                Icon(Icons.Filled.Add, "")
             }
         },
     ) { innerPadding ->

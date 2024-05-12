@@ -13,10 +13,12 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -44,6 +46,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -54,14 +57,25 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun BookNotesSection(book: Book) {
+fun BookNotesSection(book: Book, onEditNotes : (Long) -> Unit) {
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
-            Text(
-                text = stringResource(R.string.notesSectionTitles),
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.align(Alignment.Start)
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.notesSectionTitles),
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.weight(1f)
+                )
+                IconButton(
+                    onClick = { onEditNotes(book.id) },
+                    modifier = Modifier.size(24.dp)
+                ) {
+                    Icon(Icons.Filled.Edit, "")
+                }
+            }
             Divider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f), thickness = 1.dp, modifier = Modifier.padding(vertical = 8.dp))
             Text(
                 text = book .notes,
@@ -162,7 +176,7 @@ fun DeleteDialogue(onConfirm : () -> Unit, onCancel : () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookDetailsScreen(navigateBack: () -> Unit, viewModel: BookDetailsViewModel = viewModel(factory = ViewModelProvider.Factory)) {
+fun BookDetailsScreen(navigateBack: () -> Unit, navigateToNotes : (Long) -> Unit, viewModel: BookDetailsViewModel = viewModel(factory = ViewModelProvider.Factory)) {
     val coroutineScope = rememberCoroutineScope()
     val uiState = viewModel.uiState.collectAsState()
     var deleteDialogue by rememberSaveable { mutableStateOf(false) }
@@ -195,7 +209,7 @@ fun BookDetailsScreen(navigateBack: () -> Unit, viewModel: BookDetailsViewModel 
     ) { innerPadding ->
         Column {
             BookBaseInfoSection(book = uiState.value.book, innerPadding = innerPadding, viewModel::updateReadingStatus)
-            BookNotesSection(book = uiState.value.book)
+            BookNotesSection(book = uiState.value.book, navigateToNotes)
         }
 
         if (deleteDialogue) {
