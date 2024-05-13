@@ -8,4 +8,6 @@
     <string name="readingStatusReading">Reading</string>
     <string name="readingStatusPlanned">Planned</string>
     <string name="notesSectionTitles">Notes</string>
+    <string name="saveButton">Save</string>
+    <string name="cancelButton">Cancel</string>
 </resources>
