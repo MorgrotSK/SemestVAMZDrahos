@@ -27,7 +27,7 @@ object ViewModelProvider {
             BookDetailsViewModel(this.createSavedStateHandle(), inventoryApplication().container.bookRepository)
         }
         initializer {
-            NotesViewModel(inventoryApplication().container.bookRepository)
+            NotesViewModel(this.createSavedStateHandle(), inventoryApplication().container.bookRepository)
         }
 
     }

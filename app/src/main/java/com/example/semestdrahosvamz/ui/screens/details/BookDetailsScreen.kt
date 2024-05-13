@@ -200,7 +200,7 @@ fun BookDetailsScreen(navigateBack: () -> Unit, navigateToNotes : (Long) -> Unit
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {deleteDialogue = true}
+                onClick = {deleteDialogue = true }
             ) {
                 Icon(Icons.Filled.Delete, "")
             }
