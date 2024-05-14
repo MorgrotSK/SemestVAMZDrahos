@@ -26,7 +26,7 @@ class QuickAccessWidget() : GlanceAppWidget() {
         val book = if (bookId != -1) getBookById(bookId, context) else null
 
         provideContent {
-            book?.let{QuickAccessWidgetLayout(book = book)}
+            book?.let{QuickAccessWidgetLayout(book = book, context = context)}
         }
     }
     suspend fun getBookById(id: Int, context: Context): Book? {

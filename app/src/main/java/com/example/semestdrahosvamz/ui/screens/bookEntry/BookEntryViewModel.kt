@@ -37,7 +37,7 @@ class BookEntryViewModel(private val bookRepository: BookRepository, private val
 
     private suspend fun saveImageLocally(uri: Uri, id : Long): Uri = withContext(Dispatchers.IO) {
         val source = ImageDecoder.createSource(context.contentResolver, uri)
-        val bitmap = ImageDecoder.decodeBitmap(source)
+        val bitmap = Bitmap.createScaledBitmap(ImageDecoder.decodeBitmap(source), 150, 300, true)
 
         val filename = "${id}.jpg"
         val file = File(context.filesDir, filename)
