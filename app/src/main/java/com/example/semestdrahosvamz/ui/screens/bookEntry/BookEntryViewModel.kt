@@ -15,7 +15,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 
-class BookEntryViewModel(private val bookRepository: BookRepository, private val context: Context,) : ViewModel() {
+class BookEntryViewModel(private val bookRepository: BookRepository, private val context: Context) : ViewModel() {
 
     var bookEntryUIState by mutableStateOf(BookEntryUIState())
         private set

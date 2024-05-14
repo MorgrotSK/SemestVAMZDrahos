@@ -47,13 +47,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.input.pointer.PointerIcon.Companion.Text
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.semestdrahosvamz.Data.Book
 import com.example.semestdrahosvamz.ui.ViewModelProvider
-import com.example.semestdrahosvamz.ui.theme.SemestDrahosVAMZTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

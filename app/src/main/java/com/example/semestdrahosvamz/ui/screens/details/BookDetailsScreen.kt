@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -209,6 +210,9 @@ fun BookDetailsScreen(navigateBack: () -> Unit, navigateToNotes : (Long) -> Unit
     ) { innerPadding ->
         Column {
             BookBaseInfoSection(book = uiState.value.book, innerPadding = innerPadding, viewModel::updateReadingStatus)
+            Button(onClick = viewModel::OpenBookLink) {
+                Text(stringResource(R.string.readButton))
+            }
             BookNotesSection(book = uiState.value.book, navigateToNotes)
         }
 
