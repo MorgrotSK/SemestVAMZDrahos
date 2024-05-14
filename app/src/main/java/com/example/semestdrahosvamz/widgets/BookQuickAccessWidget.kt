@@ -1,23 +1,19 @@
 package com.example.semestdrahosvamz.widgets
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.glance.GlanceId
-import androidx.glance.GlanceTheme
+import androidx.glance.action.ActionParameters
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.provideContent
-import androidx.glance.background
-import androidx.glance.layout.Column
-import androidx.glance.layout.fillMaxSize
-import androidx.glance.layout.padding
-import androidx.glance.text.Text
-import androidx.glance.unit.ColorProvider
 import com.example.semestdrahosvamz.Data.Book
 import com.example.semestdrahosvamz.Data.BookDatabase
-
+import com.example.semestdrahosvamz.widgets.ui.QuickAccessWidgetLayout
 import kotlinx.coroutines.Dispatchers
-
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
 
@@ -30,7 +26,7 @@ class QuickAccessWidget() : GlanceAppWidget() {
         val book = if (bookId != -1) getBookById(bookId, context) else null
 
         provideContent {
-            book?.let{QuickAccessWidgetContent(book = book)}
+            book?.let{QuickAccessWidgetLayout(book = book)}
         }
     }
     suspend fun getBookById(id: Int, context: Context): Book? {
@@ -40,23 +36,5 @@ class QuickAccessWidget() : GlanceAppWidget() {
         }
     }
 
-    @Composable
-    fun QuickAccessWidgetContent(book: Book) {
-        Column(
-            modifier = androidx.glance.GlanceModifier
-                .fillMaxSize()
-                .padding(16.dp)
-                .background(GlanceTheme.colors.background)
 
-        ) {
-            Text(
-                text = "Hello! " + book.title,
-                style = androidx.glance.text.TextStyle(
-                    color = GlanceTheme.colors.primary
-                )
-            )
-        }
-    }
 }
-
-

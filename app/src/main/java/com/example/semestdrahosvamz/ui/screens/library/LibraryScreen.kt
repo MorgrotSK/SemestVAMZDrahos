@@ -55,6 +55,45 @@ import com.example.semestdrahosvamz.ui.ViewModelProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun LibraryScreen(
+    viewModel: LibraryViewModel = viewModel(factory = ViewModelProvider.Factory),
+    navigateToBookDetails: (Book) -> Unit,
+    navigateToBookEntry: () -> Unit,
+) {
+    val uiState by viewModel.libraryUiState.collectAsState()
+
+    Scaffold(
+        topBar = {
+            LibraryScreenTopBar(viewModel::updateFilter, uiState.searchValue)
+        },
+        bottomBar = {
+            LibraryBottomBar(viewModel::setCategories, uiState.planned, uiState.reading, uiState.finished)
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = navigateToBookEntry,
+            ) {
+                Icon(Icons.Filled.Add, "")
+            }
+        },
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            val filteredBooks = uiState.bookList.filter {
+                it.title.contains(uiState.searchValue, ignoreCase = true) && ((uiState.reading && it.status == 1) || (uiState.planned && it.status == 2) || (uiState.finished && it.status == 0))
+            }
+            BookGrid(bookList = filteredBooks, navigateToBookDetails)
+        }
+    }
+}
+
+
 @Composable
 fun BookGrid(
     bookList: List<Book>,
@@ -187,40 +226,3 @@ fun CheckboxWithLabel(label: String, checked: Boolean, onCheckedChange: (Boolean
 }
 
 
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun LibraryScreen(
-    viewModel: LibraryViewModel = viewModel(factory = ViewModelProvider.Factory),
-    navigateToBookDetails: (Book) -> Unit,
-    navigateToBookEntry: () -> Unit,
-) {
-    val uiState by viewModel.libraryUiState.collectAsState()
-
-    Scaffold(
-        topBar = {
-            LibraryScreenTopBar(viewModel::updateFilter, uiState.searchValue)
-        },
-        bottomBar = {
-           LibraryBottomBar(viewModel::setCategories, uiState.planned, uiState.reading, uiState.finished)
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = navigateToBookEntry,
-            ) {
-                Icon(Icons.Filled.Add, "")
-            }
-        },
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            val filteredBooks = uiState.bookList.filter {
-                it.title.contains(uiState.searchValue, ignoreCase = true) && ((uiState.reading && it.status == 1) || (uiState.planned && it.status == 2) || (uiState.finished && it.status == 0))
-            }
-            BookGrid(bookList = filteredBooks, navigateToBookDetails)
-        }
-    }
-}
