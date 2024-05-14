@@ -3,7 +3,7 @@
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="delDiaTitle">Are you sure?</string>
-    <string name="delDiaText">Do you really want to delete this book? The operations is ireversible!</string>
+    <string name="delDiaText">Do you really want to delete this book? This operations is ireversible!</string>
     <string name="readingStatusFinished">Finished</string>
     <string name="readingStatusReading">Reading</string>
     <string name="readingStatusPlanned">Planned</string>
@@ -11,4 +11,5 @@
     <string name="saveButton">Save</string>
     <string name="cancelButton">Cancel</string>
     <string name="readButton">Read</string>
+    <string name="bindButton">Quick access!</string>
 </resources>

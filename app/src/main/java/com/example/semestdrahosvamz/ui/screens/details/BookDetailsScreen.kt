@@ -47,7 +47,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -56,6 +55,72 @@ import com.example.semestdrahosvamz.R
 import com.example.semestdrahosvamz.ui.ViewModelProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BookDetailsScreen(navigateBack: () -> Unit, navigateToNotes : (Long) -> Unit, viewModel: BookDetailsViewModel = viewModel(factory = ViewModelProvider.Factory)) {
+    val coroutineScope = rememberCoroutineScope()
+    val uiState = viewModel.uiState.collectAsState()
+    var deleteDialogue by rememberSaveable { mutableStateOf(false) }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = uiState.value.book.title)
+                },
+                navigationIcon = {
+                    IconButton(onClick = navigateBack) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "")
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                ),
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {deleteDialogue = true }
+            ) {
+                Icon(Icons.Filled.Delete, "")
+            }
+        },
+
+        ) { innerPadding ->
+        Column {
+            BookBaseInfoSection(book = uiState.value.book, innerPadding = innerPadding, viewModel::updateReadingStatus)
+            ControlButtonsSection(onOpenClick = viewModel::openBookLink, onBindClick = viewModel::bindToWidget)
+            BookNotesSection(book = uiState.value.book, navigateToNotes)
+        }
+
+        if (deleteDialogue) {
+            DeleteDialogue(
+                onConfirm = {
+                    coroutineScope.launch {
+                        deleteDialogue = false
+                        viewModel.deleteBook()
+                        navigateBack()
+                    }
+                },
+                onCancel = {deleteDialogue = false}
+            )
+        }
+    }
+}
+
+@Composable
+fun ControlButtonsSection(onOpenClick : () -> Unit, onBindClick : () -> Unit) {
+    Row(modifier = Modifier.fillMaxSize()) {
+        Button(onClick = onOpenClick) {
+            Text(stringResource(R.string.readButton))
+        }
+        Button(onClick = onBindClick) {
+            Text(stringResource(R.string.bindButton))
+        }
+    }
+}
+
 
 @Composable
 fun BookNotesSection(book: Book, onEditNotes : (Long) -> Unit) {
@@ -175,58 +240,4 @@ fun DeleteDialogue(onConfirm : () -> Unit, onCancel : () -> Unit) {
         })
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun BookDetailsScreen(navigateBack: () -> Unit, navigateToNotes : (Long) -> Unit, viewModel: BookDetailsViewModel = viewModel(factory = ViewModelProvider.Factory)) {
-    val coroutineScope = rememberCoroutineScope()
-    val uiState = viewModel.uiState.collectAsState()
-    var deleteDialogue by rememberSaveable { mutableStateOf(false) }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = uiState.value.book.title)
-                },
-                navigationIcon = {
-                    IconButton(onClick = navigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "")
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                ),
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {deleteDialogue = true }
-            ) {
-                Icon(Icons.Filled.Delete, "")
-            }
-        },
-
-    ) { innerPadding ->
-        Column {
-            BookBaseInfoSection(book = uiState.value.book, innerPadding = innerPadding, viewModel::updateReadingStatus)
-            Button(onClick = viewModel::OpenBookLink) {
-                Text(stringResource(R.string.readButton))
-            }
-            BookNotesSection(book = uiState.value.book, navigateToNotes)
-        }
-
-        if (deleteDialogue) {
-            DeleteDialogue(
-                onConfirm = {
-                    coroutineScope.launch {
-                        deleteDialogue = false
-                        viewModel.deleteBook()
-                        navigateBack()
-                    }
-                },
-                onCancel = {deleteDialogue = false}
-                )
-        }
-    }
-}

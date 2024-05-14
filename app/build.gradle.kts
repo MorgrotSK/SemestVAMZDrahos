@@ -77,5 +77,10 @@ dependencies {
     ksp("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
 
+    //Widgets
+    implementation( "androidx.glance:glance-appwidget:1.0.0" )
+    implementation( "androidx.glance:glance-material3:1.0.0" )
+
+
 }
 
