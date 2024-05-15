@@ -1,5 +1,6 @@
 package com.example.semestdrahosvamz.widgets
 
+import QuickAccessWidget
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import androidx.glance.appwidget.GlanceAppWidget

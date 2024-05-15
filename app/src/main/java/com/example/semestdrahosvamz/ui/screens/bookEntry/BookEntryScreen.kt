@@ -7,38 +7,12 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
@@ -53,6 +27,12 @@ import com.example.semestdrahosvamz.ui.ViewModelProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+/**
+ * Composable function to display the Book Entry screen.
+ *
+ * @param navigateBack Lambda function to handle back navigation.
+ * @param viewModel The ViewModel for managing the state of the Book Entry screen.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookEntryScreen(navigateBack: () -> Unit, viewModel: BookEntryViewModel = viewModel(factory = ViewModelProvider.Factory)) {
@@ -63,11 +43,11 @@ fun BookEntryScreen(navigateBack: () -> Unit, viewModel: BookEntryViewModel = vi
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "Place holder add book")
+                    Text(text = stringResource(id = R.string.entryScreenTitle))
                 },
                 navigationIcon = {
                     IconButton(onClick = navigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.Default.ArrowBack, contentDescription = "")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -81,7 +61,6 @@ fun BookEntryScreen(navigateBack: () -> Unit, viewModel: BookEntryViewModel = vi
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                 contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                 modifier = Modifier.fillMaxHeight(0.075f)
-
             ) {
                 Row(
                     modifier = Modifier
@@ -98,26 +77,39 @@ fun BookEntryScreen(navigateBack: () -> Unit, viewModel: BookEntryViewModel = vi
                         },
                         enabled = viewModel.validateInput()
                     ) {
-                        Icon(Icons.Default.Done,  contentDescription = "")
+                        Icon(Icons.Default.Done, contentDescription = "")
                     }
                 }
             }
         }
     ) { innerPadding ->
-        BookEntryForm(innerPadding, viewModel.bookEntryUIState.title, viewModel.bookEntryUIState.link, viewModel.bookEntryUIState.imageUri, viewModel::updateState)
+        BookEntryForm(
+            innerPadding = innerPadding,
+            bookTitle = viewModel.bookEntryUIState.title,
+            bookLink = viewModel.bookEntryUIState.link,
+            bookImageUri = viewModel.bookEntryUIState.imageUri,
+            onValueChange = viewModel::updateState
+        )
     }
 }
 
-
+/**
+ * Composable function to display the form for book entry.
+ *
+ * @param innerPadding Padding values for the form.
+ * @param bookTitle The title of the book.
+ * @param bookLink The link to the book.
+ * @param bookImageUri The URI of the book's cover image.
+ * @param onValueChange Lambda function to handle value changes in the form.
+ */
 @Composable
 fun BookEntryForm(
     innerPadding: PaddingValues,
     bookTitle: String,
     bookLink: String,
-    bookImageUri : Uri,
+    bookImageUri: Uri,
     onValueChange: (String, String, Uri) -> Unit
 ) {
-
     BoxWithConstraints(
         modifier = Modifier
             .padding(innerPadding)
@@ -133,7 +125,7 @@ fun BookEntryForm(
                 onValueChange = onValueChange
             )
         } else {
-            //Lanscape Layout
+            // Landscape Layout
             BookEntryFormLandscape(
                 innerPadding = innerPadding,
                 bookTitle = bookTitle,
@@ -143,8 +135,17 @@ fun BookEntryForm(
             )
         }
     }
-
 }
+
+/**
+ * Composable function to display the book entry form in landscape mode.
+ *
+ * @param innerPadding Padding values for the form.
+ * @param bookTitle The title of the book.
+ * @param bookLink The link to the book.
+ * @param bookImageUri The URI of the book's cover image.
+ * @param onValueChange Lambda function to handle value changes in the form.
+ */
 @Composable
 fun BookEntryFormLandscape(
     innerPadding: PaddingValues,
@@ -178,7 +179,7 @@ fun BookEntryFormLandscape(
             OutlinedTextField(
                 value = bookTitle,
                 onValueChange = { title -> onValueChange(title, bookLink, bookImageUri) },
-                label = { Text("Title") },
+                label = { Text(stringResource(id = R.string.tiltleInputLabel)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -188,13 +189,22 @@ fun BookEntryFormLandscape(
             OutlinedTextField(
                 value = bookLink,
                 onValueChange = { link -> onValueChange(bookTitle, link, bookImageUri) },
-                label = { Text("Link") },
+                label = { Text(stringResource(id = R.string.linkInputLabel)) },
                 modifier = Modifier.fillMaxWidth()
             )
         }
     }
 }
 
+/**
+ * Composable function to display the book entry form in portrait mode.
+ *
+ * @param innerPadding Padding values for the form.
+ * @param bookTitle The title of the book.
+ * @param bookLink The link to the book.
+ * @param bookImageUri The URI of the book's cover image.
+ * @param onValueChange Lambda function to handle value changes in the form.
+ */
 @Composable
 fun BookEntryFormPortrait(
     innerPadding: PaddingValues,
@@ -215,7 +225,7 @@ fun BookEntryFormPortrait(
         OutlinedTextField(
             value = bookTitle,
             onValueChange = { title -> onValueChange(title, bookLink, bookImageUri) },
-            label = { Text("Title") },
+            label = { Text(stringResource(id = R.string.tiltleInputLabel)) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -223,12 +233,20 @@ fun BookEntryFormPortrait(
         OutlinedTextField(
             value = bookLink,
             onValueChange = { link -> onValueChange(bookTitle, link, bookImageUri) },
-            label = { Text("Link") },
+            label = { Text(stringResource(id = R.string.linkInputLabel)) },
             modifier = Modifier.fillMaxWidth()
         )
     }
 }
 
+/**
+ * Composable function to display a selectable image.
+ *
+ * @param bookTitle The title of the book.
+ * @param bookLink The link to the book.
+ * @param bookImageUri The URI of the book's cover image.
+ * @param onValueChange Lambda function to handle value changes when an image is selected.
+ */
 @Composable
 fun SelectableImage(
     bookTitle: String,
@@ -289,8 +307,3 @@ fun SelectableImage(
         }
     }
 }
-
-
-
-
-

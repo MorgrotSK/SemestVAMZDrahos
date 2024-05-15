@@ -19,9 +19,9 @@ package com.example.semestdrahosvamz.Data
 import kotlinx.coroutines.flow.Flow
 
 class OfflineIBookRepository(private val itemDao: BookDao) : BookRepository{
-    override fun getAllItemsStream(): Flow<List<Book>> = itemDao.getAllItems()
+    override fun getAllItemsStream(): Flow<List<Book>> = itemDao.getAllBooks()
 
-    override fun getItemStream(id: Int): Flow<Book> = itemDao.getItem(id)
+    override fun getItemStream(id: Int): Flow<Book> = itemDao.getBook(id)
 
     override suspend fun insertItem(item: Book) : Long = itemDao.insert(item)
 

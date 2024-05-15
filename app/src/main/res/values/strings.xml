@@ -14,4 +14,7 @@
     <string name="bindButton">Bind</string>
     <string name="updateBookMarkButton">Save</string>
     <string name="messagePickImage">Pick Image</string>
+    <string name="entryScreenTitle">Add a new book</string>
+    <string name="tiltleInputLabel">Title</string>
+    <string name="linkInputLabel">Book link</string>
 </resources>
