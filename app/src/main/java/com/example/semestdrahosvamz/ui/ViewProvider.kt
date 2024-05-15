@@ -31,7 +31,7 @@ object ViewModelProvider {
             NotesViewModel(this.createSavedStateHandle(), inventoryApplication().container.bookRepository)
         }
         initializer {
-            ReaderScreenViewModel(inventoryApplication().container.bookRepository)
+            ReaderScreenViewModel(this.createSavedStateHandle(), inventoryApplication().container.bookRepository)
         }
 
     }

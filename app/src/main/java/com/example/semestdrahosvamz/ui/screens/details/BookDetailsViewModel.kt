@@ -12,13 +12,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class BookDetailsViewModel (savedStateHandle: SavedStateHandle, private val bookRepository: BookRepository, private val context: Context) : ViewModel() {
-    private val itemId: Int = checkNotNull(savedStateHandle[BookDetailsScreenDestination.bookIdArg])
+    private val bookId: Int = checkNotNull(savedStateHandle[BookDetailsScreenDestination.bookIdArg])
 
     var uiState = MutableStateFlow(BookDetailsUiState())
 
     init {
         viewModelScope.launch {
-            bookRepository.getItemStream(itemId).collect { book ->
+            bookRepository.getItemStream(bookId).collect { book ->
                 if (book != null) {
                     uiState.value = BookDetailsUiState(book = book)
                 } else {

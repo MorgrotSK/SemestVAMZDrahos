@@ -26,16 +26,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.semestdrahosvamz.R
 import com.example.semestdrahosvamz.ui.ViewModelProvider
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReaderScreen(viewModel: ReaderScreenViewModel = viewModel(factory = ViewModelProvider.Factory), navigateBack : () -> Unit) {
-
-
     val uiState = viewModel.uiState.collectAsState()
 
     Scaffold(
         topBar = {
-            ReaderTopBar(bookTitle = "", navigateBack, viewModel::updateBookMark)
+            ReaderTopBar(bookTitle = uiState.value.book.title, navigateBack, viewModel::updateBookMark)
         }
     ) {
         innerPadding -> ContentSection(innerPadding = innerPadding, onLoadedPage = {})
