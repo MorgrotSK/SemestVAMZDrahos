@@ -1,6 +1,5 @@
 package com.example.semestdrahosvamz.ui.screens.reader
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -29,7 +28,6 @@ class ReaderScreenViewModel(savedStateHandle: SavedStateHandle, private val book
 
 
     fun updateCurrentUrl(newUrl : String) {
-
         if (newUrl != uiState.value.currentUrl && newUrl != "about:blank") {
             uiState.value =  uiState.value.copy(
                 book = uiState.value.book.copy(bookMarkUrl = newUrl),
