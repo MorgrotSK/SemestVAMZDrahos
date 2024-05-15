@@ -12,4 +12,5 @@ data class Book(
     val imageUri : String,
     val status : Int,
     val notes : String,
+    val bookMarkUrl : String
 )

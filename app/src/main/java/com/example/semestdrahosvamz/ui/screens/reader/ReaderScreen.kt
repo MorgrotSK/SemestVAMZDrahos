@@ -35,7 +35,7 @@ fun ReaderScreen(viewModel: ReaderScreenViewModel = viewModel(factory = ViewMode
             ReaderTopBar(bookTitle = uiState.value.book.title, navigateBack, viewModel::updateBookMark)
         }
     ) {
-        innerPadding -> ContentSection(innerPadding = innerPadding, onLoadedPage = {})
+        innerPadding -> ContentSection(innerPadding = innerPadding, onLoadedPage = {}, uiState.value.currentUrl)
     }
 
 }
@@ -66,7 +66,7 @@ fun ReaderTopBar(bookTitle : String, navigateBack: () -> Unit, onSaveClick : () 
 
 
 @Composable
-fun ContentSection(innerPadding : PaddingValues, onLoadedPage : (String) -> Unit) {
+fun ContentSection(innerPadding : PaddingValues, onLoadedPage : (String) -> Unit, currentUrl : String) {
 
     //This code is sourced from: https://medium.com/@sahar.asadian90/webview-in-jetpack-compose-71f237873c2e
     AndroidView(
@@ -83,7 +83,7 @@ fun ContentSection(innerPadding : PaddingValues, onLoadedPage : (String) -> Unit
             }
         },
         update = { webView ->
-            webView.loadUrl("https://www.google.sk/")
+            webView.loadUrl(currentUrl)
         }
     )
 }

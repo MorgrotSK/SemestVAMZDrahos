@@ -6,21 +6,20 @@ import androidx.lifecycle.viewModelScope
 import com.example.semestdrahosvamz.Data.Book
 import com.example.semestdrahosvamz.Data.BookRepository
 import com.example.semestdrahosvamz.ui.screens.details.BookDetailsScreenDestination
-import com.example.semestdrahosvamz.ui.screens.details.BookDetailsUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class ReaderScreenViewModel(savedStateHandle: SavedStateHandle, bookRepository: BookRepository) : ViewModel() {
-    var uiState = MutableStateFlow(BookDetailsUiState())
+    var uiState = MutableStateFlow(ReaderUIState())
     private val bookId: Int = checkNotNull(savedStateHandle[BookDetailsScreenDestination.bookIdArg])
 
     init {
         viewModelScope.launch {
             bookRepository.getItemStream(bookId).collect() { book ->
                 if (book != null) {
-                    uiState.value = BookDetailsUiState(book = book)
+                    uiState.value = ReaderUIState(book = book, currentUrl = book.link)
                 } else {
-                    uiState.value = BookDetailsUiState(book = Book(0, "", "", "", 1, ""))
+                    uiState.value = ReaderUIState(book = Book(0, "", "", "", 1, "", ""))
                 }
 
             }
