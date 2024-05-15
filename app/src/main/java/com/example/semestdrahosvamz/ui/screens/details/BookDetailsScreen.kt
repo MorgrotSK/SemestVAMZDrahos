@@ -57,7 +57,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookDetailsScreen(navigateBack: () -> Unit, navigateToNotes : (Long) -> Unit, viewModel: BookDetailsViewModel = viewModel(factory = ViewModelProvider.Factory)) {
+fun BookDetailsScreen(navigateBack: () -> Unit, navigateToNotes : (Long) -> Unit, viewModel: BookDetailsViewModel = viewModel(factory = ViewModelProvider.Factory), navigateToReader : (Int) -> Unit) {
     val coroutineScope = rememberCoroutineScope()
     val uiState = viewModel.uiState.collectAsState()
     var deleteDialogue by rememberSaveable { mutableStateOf(false) }
@@ -89,8 +89,15 @@ fun BookDetailsScreen(navigateBack: () -> Unit, navigateToNotes : (Long) -> Unit
 
         ) { innerPadding ->
         Column {
-            BookBaseInfoSection(book = uiState.value.book, innerPadding = innerPadding, viewModel::updateReadingStatus)
-            ControlButtonsSection(onOpenClick = viewModel::openBookLink, onBindClick = viewModel::bindToWidget)
+            BookBaseInfoSection(
+                book = uiState.value.book,
+                innerPadding = innerPadding, viewModel::updateReadingStatus
+            )
+            ControlButtonsSection(
+                onOpenClick = viewModel::openBookLink,
+                onBindClick = viewModel::bindToWidget,
+                onReadClick = {navigateToReader(uiState.value.book.id.toInt())}
+            )
             BookNotesSection(book = uiState.value.book, navigateToNotes)
         }
 
@@ -110,13 +117,16 @@ fun BookDetailsScreen(navigateBack: () -> Unit, navigateToNotes : (Long) -> Unit
 }
 
 @Composable
-fun ControlButtonsSection(onOpenClick : () -> Unit, onBindClick : () -> Unit) {
+fun ControlButtonsSection(onOpenClick : () -> Unit, onBindClick : () -> Unit, onReadClick : () -> Unit) {
     Row(modifier = Modifier.fillMaxSize()) {
         Button(onClick = onOpenClick) {
             Text(stringResource(R.string.readButton))
         }
         Button(onClick = onBindClick) {
             Text(stringResource(R.string.bindButton))
+        }
+        Button(onClick = onReadClick) {
+            Text(stringResource(R.string.readButton))
         }
     }
 }

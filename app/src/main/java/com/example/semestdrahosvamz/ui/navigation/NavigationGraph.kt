@@ -15,6 +15,8 @@ import com.example.semestdrahosvamz.ui.screens.library.LibraryScreen
 import com.example.semestdrahosvamz.ui.screens.library.LibraryScreenDestination
 import com.example.semestdrahosvamz.ui.screens.notes.BookNotesScreen
 import com.example.semestdrahosvamz.ui.screens.notes.BookNotesScreenDestination
+import com.example.semestdrahosvamz.ui.screens.reader.ReaderScreen
+import com.example.semestdrahosvamz.ui.screens.reader.ReaderScreenDestination
 
 @Composable
 fun LibraryNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
@@ -37,9 +39,21 @@ fun LibraryNavHost(navController: NavHostController, modifier: Modifier = Modifi
         ) {
             BookDetailsScreen(
                 navigateBack = {navController.popBackStack()},
-                navigateToNotes = {navController.navigate("${BookNotesScreenDestination.route}/${it}")}
+                navigateToNotes = {navController.navigate("${BookNotesScreenDestination.route}/${it}")},
+                navigateToReader = {navController.navigate("${ReaderScreenDestination.route}/${it}")},
             )
         }
+
+        composable(
+            route = ReaderScreenDestination.routeWithArgs,
+            arguments = listOf(
+                navArgument(BookDetailsScreenDestination.bookIdArg) {type = NavType.IntType},
+            )
+        ) {
+            ReaderScreen()
+        }
+
+
         composable(route = BookNotesScreenDestination.routeWithArgs,
             arguments = listOf(navArgument(BookNotesScreenDestination.bookIdArg) {
                 type = NavType.IntType
