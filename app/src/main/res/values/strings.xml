@@ -17,4 +17,5 @@
     <string name="entryScreenTitle">Add a new book</string>
     <string name="tiltleInputLabel">Title</string>
     <string name="linkInputLabel">Book link</string>
+    <string name="openButton">Open</string>
 </resources>

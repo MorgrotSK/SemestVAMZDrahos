@@ -82,7 +82,7 @@ fun BookBaseInfoSectionPortrait(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(1f)
-                    .background(color = MaterialTheme.colorScheme.primaryContainer)
+                    .background(color = MaterialTheme.colorScheme.surfaceVariant)
             ) {
                 if (book.imageUri.isNotEmpty()) {
                     LaunchedEffect(book.imageUri) {

@@ -25,7 +25,7 @@ fun ControlButtonsSection(onOpenClick: () -> Unit, onBindClick: () -> Unit, onRe
             .fillMaxHeight(0.10f)
     ) {
         Button(onClick = onOpenClick, modifier = Modifier.weight(1f)) {
-            Text(stringResource(R.string.readButton), style = MaterialTheme.typography.bodySmall)
+            Text(stringResource(R.string.openButton), style = MaterialTheme.typography.bodySmall)
         }
         Spacer(modifier = Modifier.width(6.dp))
         Button(onClick = onBindClick, modifier = Modifier.weight(1f)) {
