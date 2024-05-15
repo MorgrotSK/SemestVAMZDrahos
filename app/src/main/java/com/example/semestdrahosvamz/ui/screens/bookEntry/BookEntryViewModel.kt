@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.util.Log
+import android.util.Patterns
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -23,6 +24,21 @@ class BookEntryViewModel(private val bookRepository: BookRepository, private val
     fun updateState(title : String, link : String, imageUri : Uri) {
         bookEntryUIState = BookEntryUIState(title, link, imageUri)
     }
+
+    fun validateInput(): Boolean {
+
+        // Check if the title, link, and imageUri are not empty
+        if (bookEntryUIState.title.isBlank() ||
+            bookEntryUIState.link.isBlank() ||
+            bookEntryUIState.imageUri == Uri.EMPTY) {
+            return false
+        }
+
+        // Check if the URL is valid
+        return Patterns.WEB_URL.matcher(bookEntryUIState.link).matches()
+    }
+
+
     suspend fun saveBook() {
         Log.d("SaveBook", "Original URI: ${bookEntryUIState.imageUri}")
         val bookId = bookRepository.insertItem(bookEntryUIState.getBook())

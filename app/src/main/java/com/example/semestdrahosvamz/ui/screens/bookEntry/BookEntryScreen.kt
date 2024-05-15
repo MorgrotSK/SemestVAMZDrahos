@@ -89,14 +89,16 @@ fun BookEntryScreen(navigateBack: () -> Unit, viewModel: BookEntryViewModel = vi
                         .padding(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    IconButton(onClick = {
-                        coroutineScope.launch {
-                            viewModel.saveBook()
-                            navigateBack()
-                        }
-                    },
+                    IconButton(
+                        onClick = {
+                            coroutineScope.launch {
+                                viewModel.saveBook()
+                                navigateBack()
+                            }
+                        },
+                        enabled = viewModel.validateInput()
                     ) {
-                        Icon(Icons.Default.Done,  contentDescription = "Save thew new book")
+                        Icon(Icons.Default.Done,  contentDescription = "")
                     }
                 }
             }
