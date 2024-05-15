@@ -2,6 +2,7 @@ package com.example.semestdrahosvamz.ui.screens.details.UiElements
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -27,11 +28,13 @@ fun BookNotesSection(book: Book, onEditNotes: (Long) -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
+            .fillMaxHeight(0.35f)
     ) {
         Column {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(vertical = 16.dp)
+                modifier = Modifier
+                    .padding(vertical = 16.dp)
             ) {
                 Text(
                     text = stringResource(R.string.notesSectionTitles),

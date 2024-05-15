@@ -2,6 +2,7 @@ package com.example.semestdrahosvamz.ui.screens.details.UiElements
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -21,6 +22,7 @@ fun ControlButtonsSection(onOpenClick: () -> Unit, onBindClick: () -> Unit, onRe
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
+            .fillMaxHeight(0.10f)
     ) {
         Button(onClick = onOpenClick, modifier = Modifier.weight(1f)) {
             Text(stringResource(R.string.readButton), style = MaterialTheme.typography.bodySmall)

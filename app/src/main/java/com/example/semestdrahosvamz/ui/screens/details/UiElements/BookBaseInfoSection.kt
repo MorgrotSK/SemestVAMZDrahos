@@ -6,11 +6,16 @@ import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -29,6 +34,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontVariation.weight
 import androidx.compose.ui.unit.dp
 import com.example.semestdrahosvamz.Data.Book
 import com.example.semestdrahosvamz.R
@@ -48,55 +54,77 @@ fun BookBaseInfoSection(book: Book, innerPadding: PaddingValues, onStatusChange:
 }
 
 @Composable
-fun BookBaseInfoSectionPortrait(book: Book, innerPadding: PaddingValues, onStatusChange: (Int) -> Unit, modifier: Modifier = Modifier) {
+fun BookBaseInfoSectionPortrait(
+    book: Book,
+    innerPadding: PaddingValues,
+    onStatusChange: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val bitmap = remember(book.imageUri) { mutableStateOf<Bitmap?>(null) }
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
-    val imageSize = 225.dp
+    val imageSize = 250.dp
 
     Surface(
         modifier = modifier
             .padding(innerPadding)
             .fillMaxWidth()
+            .height(400.dp)
     ) {
-        Row(
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .background(color = MaterialTheme.colorScheme.surfaceVariant)
+                .fillMaxSize()
+                .padding(12.dp),
+            contentAlignment = Alignment.Center
         ) {
-            if (book.imageUri.isNotEmpty()) {
-                LaunchedEffect(book.imageUri) {
-                    coroutineScope.launch(Dispatchers.IO) {
-                        val source = ImageDecoder.createSource(context.contentResolver, Uri.parse(book.imageUri))
-                        bitmap.value = ImageDecoder.decodeBitmap(source)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(1f)
+                    .background(color = MaterialTheme.colorScheme.primaryContainer)
+            ) {
+                if (book.imageUri.isNotEmpty()) {
+                    LaunchedEffect(book.imageUri) {
+                        coroutineScope.launch(Dispatchers.IO) {
+                            val source = ImageDecoder.createSource(context.contentResolver, Uri.parse(book.imageUri))
+                            bitmap.value = ImageDecoder.decodeBitmap(source)
+                        }
+                    }
+
+                    bitmap.value?.let { btm ->
+                        Image(
+                            bitmap = btm.asImageBitmap(),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(imageSize)
+                                .aspectRatio(4f / 5f)
+                        )
                     }
                 }
 
-                bitmap.value?.let { btm ->
-                    Image(
-                        bitmap = btm.asImageBitmap(),
-                        contentDescription = "",
-                        modifier = Modifier
-                            .size(imageSize)
+                Spacer(modifier = Modifier.width(4.dp))
+
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                ) {
+                    Text(
+                        text = book.title,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    ReadingStatusOptions(
+                        selectedOption = book.status,
+                        onOptionSelected = onStatusChange
                     )
                 }
-            }
-            Column(
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .padding(horizontal = 16.dp)
-            ) {
-                Text(
-                    text = book.title,
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
-                ReadingStatusOptions(selectedOption = book.status, onOptionSelected = onStatusChange)
             }
         }
     }
 }
+
+
 
 @Composable
 fun BookBaseInfoSectionLandscape(book: Book, innerPadding: PaddingValues, onStatusChange: (Int) -> Unit, modifier: Modifier = Modifier) {

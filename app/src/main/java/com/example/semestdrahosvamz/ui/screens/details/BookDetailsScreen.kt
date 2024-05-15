@@ -114,13 +114,13 @@ fun ContentSectionPortrait(
             innerPadding = PaddingValues(0.dp),
             onStatusChange = onStatusChange,
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(10.dp))
         ControlButtonsSection(
             onOpenClick = onOpenClick,
             onBindClick = onBindClick,
             onReadClick = onReadClick
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(10.dp))
         BookNotesSection(book = book, navigateToNotes)
     }
 
