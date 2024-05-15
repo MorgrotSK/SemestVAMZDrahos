@@ -31,7 +31,6 @@ class NotesViewModel(
     }
 
     companion object {
-        private const val TIMEOUT_MILLIS = 5_000L
         const val MAX_CHAR_COUNT = 500
     }
 
