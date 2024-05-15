@@ -41,6 +41,15 @@ import com.example.semestdrahosvamz.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+/**
+ * A composable function to display the base information of a book.
+ * This function adapts its layout based on the device orientation.
+ *
+ * @param book The book object containing information to display.
+ * @param innerPadding Padding values to apply to the content.
+ * @param onStatusChange Callback function to handle status changes.
+ * @param modifier The modifier to apply to this layout.
+ */
 @Composable
 fun BookBaseInfoSection(book: Book, innerPadding: PaddingValues, onStatusChange: (Int) -> Unit, modifier: Modifier = Modifier) {
     val configuration = LocalConfiguration.current
@@ -53,6 +62,14 @@ fun BookBaseInfoSection(book: Book, innerPadding: PaddingValues, onStatusChange:
     }
 }
 
+/**
+ * A composable function to display the base information of a book in portrait orientation.
+ *
+ * @param book The book object containing information to display.
+ * @param innerPadding Padding values to apply to the content.
+ * @param onStatusChange Callback function to handle status changes.
+ * @param modifier The modifier to apply to this layout.
+ */
 @Composable
 fun BookBaseInfoSectionPortrait(
     book: Book,
@@ -124,8 +141,14 @@ fun BookBaseInfoSectionPortrait(
     }
 }
 
-
-
+/**
+ * A composable function to display the base information of a book in landscape orientation.
+ *
+ * @param book The book object containing information to display.
+ * @param innerPadding Padding values to apply to the content.
+ * @param onStatusChange Callback function to handle status changes.
+ * @param modifier The modifier to apply to this layout.
+ */
 @Composable
 fun BookBaseInfoSectionLandscape(book: Book, innerPadding: PaddingValues, onStatusChange: (Int) -> Unit, modifier: Modifier = Modifier) {
     val bitmap = remember(book.imageUri) { mutableStateOf<Bitmap?>(null) }
@@ -144,7 +167,6 @@ fun BookBaseInfoSectionLandscape(book: Book, innerPadding: PaddingValues, onStat
                 .padding(16.dp)
                 .background(color = MaterialTheme.colorScheme.surfaceVariant)
         ) {
-
             Row {
                 if (book.imageUri.isNotEmpty()) {
                     LaunchedEffect(book.imageUri) {
@@ -172,18 +194,22 @@ fun BookBaseInfoSectionLandscape(book: Book, innerPadding: PaddingValues, onStat
                     ReadingStatusOptions(selectedOption = book.status, onOptionSelected = onStatusChange)
                 }
             }
-
-
         }
     }
 }
 
-
+/**
+ * A composable function to display reading status options.
+ *
+ * @param selectedOption The currently selected reading status option.
+ * @param onOptionSelected Callback function to handle option selection.
+ */
 @Composable
 fun ReadingStatusOptions(selectedOption: Int, onOptionSelected: (Int) -> Unit) {
     val options = listOf(
-        stringResource(R.string.readingStatusFinished), stringResource(R.string.readingStatusReading), stringResource(
-            R.string.readingStatusPlanned)
+        stringResource(R.string.readingStatusFinished),
+        stringResource(R.string.readingStatusReading),
+        stringResource(R.string.readingStatusPlanned)
     )
     Column {
         options.forEachIndexed { index, text ->

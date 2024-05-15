@@ -24,7 +24,6 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
-
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -55,7 +54,14 @@ import com.example.semestdrahosvamz.ui.ViewModelProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
+/**
+ * A composable function to display the library screen.
+ * This function includes a top bar, a bottom bar, and a grid of books.
+ *
+ * @param viewModel The ViewModel for the library screen, default is provided by the ViewModelProvider.
+ * @param navigateToBookDetails Callback function to navigate to the book details screen.
+ * @param navigateToBookEntry Callback function to navigate to the book entry screen.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LibraryScreen(
@@ -76,7 +82,7 @@ fun LibraryScreen(
             FloatingActionButton(
                 onClick = navigateToBookEntry,
             ) {
-                Icon(Icons.Filled.Add, "")
+                Icon(Icons.Filled.Add, contentDescription = null)
             }
         },
     ) { innerPadding ->
@@ -86,14 +92,22 @@ fun LibraryScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             val filteredBooks = uiState.bookList.filter {
-                it.title.contains(uiState.searchValue, ignoreCase = true) && ((uiState.reading && it.status == 1) || (uiState.planned && it.status == 2) || (uiState.finished && it.status == 0))
+                it.title.contains(uiState.searchValue, ignoreCase = true) &&
+                        ((uiState.reading && it.status == 1) ||
+                                (uiState.planned && it.status == 2) ||
+                                (uiState.finished && it.status == 0))
             }
             BookGrid(bookList = filteredBooks, navigateToBookDetails)
         }
     }
 }
 
-
+/**
+ * A composable function to display a grid of books.
+ *
+ * @param bookList The list of books to display.
+ * @param onBookClick Callback function to handle book click events.
+ */
 @Composable
 fun BookGrid(
     bookList: List<Book>,
@@ -106,27 +120,32 @@ fun BookGrid(
             ShowBook(book = book, onBookClick)
         }
     }
-
 }
 
+/**
+ * A composable function to display a single book item.
+ *
+ * @param book The book object to display.
+ * @param onBookClick Callback function to handle book click events.
+ */
 @Composable
 fun ShowBook(book: Book, onBookClick: (Book) -> Unit) {
     val bitmap = remember(book.imageUri) { mutableStateOf<Bitmap?>(null) }
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
-    Card( modifier = Modifier
-        .fillMaxWidth()
-        .padding(8.dp)
-        .height(210.dp)
-        .width(210.dp)
-        .clickable { onBookClick(book) },
-
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .height(210.dp)
+            .width(210.dp)
+            .clickable { onBookClick(book) }
     ) {
         Column(
             modifier = Modifier.padding(8.dp)
         ) {
-            if (book.imageUri != "") {
+            if (book.imageUri.isNotEmpty()) {
                 LaunchedEffect(book.imageUri) {
                     coroutineScope.launch(Dispatchers.IO) {
                         val source = ImageDecoder.createSource(context.contentResolver, Uri.parse(book.imageUri))
@@ -154,6 +173,12 @@ fun ShowBook(book: Book, onBookClick: (Book) -> Unit) {
     }
 }
 
+/**
+ * A composable function to display the top bar of the library screen.
+ *
+ * @param onSearchType Callback function to handle search input changes.
+ * @param searchValue The current search input value.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LibraryScreenTopBar(
@@ -175,7 +200,7 @@ fun LibraryScreenTopBar(
                 Spacer(Modifier.width(8.dp))
                 TextField(
                     value = searchValue,
-                    onValueChange = { value -> onSearchType(value)},
+                    onValueChange = { value -> onSearchType(value) },
                     singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(
                         containerColor = Color.Transparent,
@@ -190,6 +215,14 @@ fun LibraryScreenTopBar(
     )
 }
 
+/**
+ * A composable function to display the bottom bar of the library screen.
+ *
+ * @param onCategoryChange Callback function to handle category changes.
+ * @param planned The current state of the planned category.
+ * @param reading The current state of the reading category.
+ * @param finished The current state of the finished category.
+ */
 @Composable
 fun LibraryBottomBar(
     onCategoryChange: (Boolean, Boolean, Boolean) -> Unit,
@@ -212,6 +245,13 @@ fun LibraryBottomBar(
     }
 }
 
+/**
+ * A composable function to display a checkbox with a label.
+ *
+ * @param label The label text for the checkbox.
+ * @param checked The current state of the checkbox.
+ * @param onCheckedChange Callback function to handle checkbox state changes.
+ */
 @Composable
 fun CheckboxWithLabel(label: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
     Row(
@@ -219,10 +259,8 @@ fun CheckboxWithLabel(label: String, checked: Boolean, onCheckedChange: (Boolean
     ) {
         Checkbox(
             checked = checked,
-            onCheckedChange = { isChecked -> onCheckedChange(isChecked)            }
+            onCheckedChange = { isChecked -> onCheckedChange(isChecked) }
         )
         Text(text = label, style = MaterialTheme.typography.bodyMedium)
     }
 }
-
-

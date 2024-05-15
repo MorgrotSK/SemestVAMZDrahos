@@ -22,6 +22,13 @@ import androidx.compose.ui.unit.dp
 import com.example.semestdrahosvamz.Data.Book
 import com.example.semestdrahosvamz.R
 
+/**
+ * A composable function to display the notes section of a book.
+ * This function includes a title, a button to edit notes, and the notes content.
+ *
+ * @param book The book object containing the notes to display.
+ * @param onEditNotes Callback function to handle the edit notes action.
+ */
 @Composable
 fun BookNotesSection(book: Book, onEditNotes: (Long) -> Unit) {
     Surface(
@@ -45,7 +52,7 @@ fun BookNotesSection(book: Book, onEditNotes: (Long) -> Unit) {
                     onClick = { onEditNotes(book.id) },
                     modifier = Modifier.size(24.dp)
                 ) {
-                    Icon(Icons.Filled.Edit, "")
+                    Icon(Icons.Filled.Edit, contentDescription = null)
                 }
             }
             Divider(
@@ -61,3 +68,4 @@ fun BookNotesSection(book: Book, onEditNotes: (Long) -> Unit) {
         }
     }
 }
+

@@ -15,7 +15,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.semestdrahosvamz.R
 
-
+/**
+ * A composable function to display a section of control buttons.
+ * This function includes buttons to open, bind, and read a book.
+ *
+ * @param onOpenClick Callback function to handle the open button click.
+ * @param onBindClick Callback function to handle the bind button click.
+ * @param onReadClick Callback function to handle the read button click.
+ */
 @Composable
 fun ControlButtonsSection(onOpenClick: () -> Unit, onBindClick: () -> Unit, onReadClick: () -> Unit) {
     Row(

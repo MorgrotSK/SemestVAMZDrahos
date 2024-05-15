@@ -11,7 +11,18 @@ import com.example.semestdrahosvamz.Data.BookRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class BookDetailsViewModel (savedStateHandle: SavedStateHandle, private val bookRepository: BookRepository, private val context: Context) : ViewModel() {
+/**
+ * ViewModel for managing the state and actions of the Book Details screen.
+ *
+ * @property savedStateHandle The SavedStateHandle to retrieve saved state.
+ * @property bookRepository The repository for managing book data.
+ * @property context The context used for accessing resources and starting activities.
+ */
+class BookDetailsViewModel(
+    savedStateHandle: SavedStateHandle,
+    private val bookRepository: BookRepository,
+    private val context: Context
+) : ViewModel() {
     private val bookId: Int = checkNotNull(savedStateHandle[BookDetailsScreenDestination.bookIdArg])
 
     var uiState = MutableStateFlow(BookDetailsUiState())
@@ -24,16 +35,16 @@ class BookDetailsViewModel (savedStateHandle: SavedStateHandle, private val book
                 } else {
                     uiState.value = BookDetailsUiState(book = Book(0, "", "", "", 1, "", ""))
                 }
-
             }
         }
     }
 
-    companion object {
-        private const val TIMEOUT_MILLIS = 5_000L
-    }
-
-    fun updateReadingStatus(newStatus : Int) {
+    /**
+     * Updates the reading status of the book.
+     *
+     * @param newStatus The new reading status.
+     */
+    fun updateReadingStatus(newStatus: Int) {
         viewModelScope.launch {
             val currentBook = uiState.value.book
             if (currentBook != null) {
@@ -44,6 +55,9 @@ class BookDetailsViewModel (savedStateHandle: SavedStateHandle, private val book
         }
     }
 
+    /**
+     * Binds the book to a widget by saving the book ID in shared preferences.
+     */
     fun bindToWidget() {
         val sharedPreferences = context.getSharedPreferences("widget_prefs", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
@@ -51,6 +65,9 @@ class BookDetailsViewModel (savedStateHandle: SavedStateHandle, private val book
         editor.apply()
     }
 
+    /**
+     * Deletes the current book from the repository.
+     */
     fun deleteBook() {
         viewModelScope.launch {
             val currentBook = uiState.value.book
@@ -59,6 +76,10 @@ class BookDetailsViewModel (savedStateHandle: SavedStateHandle, private val book
             }
         }
     }
+
+    /**
+     * Opens the book link in a web browser.
+     */
     fun openBookLink() {
         val webIntent: Intent = Uri.parse(uiState.value.book.link).let { webpage ->
             Intent(Intent.ACTION_VIEW, webpage).apply {
