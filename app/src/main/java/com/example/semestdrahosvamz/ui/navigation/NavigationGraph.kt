@@ -50,7 +50,7 @@ fun LibraryNavHost(navController: NavHostController, modifier: Modifier = Modifi
                 navArgument(BookDetailsScreenDestination.bookIdArg) {type = NavType.IntType},
             )
         ) {
-            ReaderScreen()
+            ReaderScreen(navigateBack = {navController.popBackStack()})
         }
 
 

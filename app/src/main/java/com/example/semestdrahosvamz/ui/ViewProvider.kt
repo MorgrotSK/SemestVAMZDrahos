@@ -11,6 +11,7 @@ import com.example.semestdrahosvamz.ui.screens.bookEntry.BookEntryViewModel
 import com.example.semestdrahosvamz.ui.screens.details.BookDetailsViewModel
 import com.example.semestdrahosvamz.ui.screens.library.LibraryViewModel
 import com.example.semestdrahosvamz.ui.screens.notes.NotesViewModel
+import com.example.semestdrahosvamz.ui.screens.reader.ReaderScreenViewModel
 
 
 object ViewModelProvider {
@@ -28,6 +29,9 @@ object ViewModelProvider {
         }
         initializer {
             NotesViewModel(this.createSavedStateHandle(), inventoryApplication().container.bookRepository)
+        }
+        initializer {
+            ReaderScreenViewModel(inventoryApplication().container.bookRepository)
         }
 
     }

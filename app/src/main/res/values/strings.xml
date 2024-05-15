@@ -12,4 +12,5 @@
     <string name="cancelButton">Cancel</string>
     <string name="readButton">Read</string>
     <string name="bindButton">Quick access!</string>
+    <string name="updateBookMarkButton">Save</string>
 </resources>
