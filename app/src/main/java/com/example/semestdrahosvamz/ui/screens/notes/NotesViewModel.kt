@@ -32,7 +32,6 @@ class NotesViewModel(savedStateHandle: SavedStateHandle, private val bookReposit
     }
 
     fun saveChanges() {
-        Log.i("", notesUiState.value.book.id.toString());
         viewModelScope.launch {
             bookRepository.updateItem(notesUiState.value.book)
 

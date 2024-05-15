@@ -35,7 +35,7 @@ fun ReaderScreen(viewModel: ReaderScreenViewModel = viewModel(factory = ViewMode
             ReaderTopBar(bookTitle = uiState.value.book.title, navigateBack, viewModel::updateBookMark)
         }
     ) {
-        innerPadding -> ContentSection(innerPadding = innerPadding, onLoadedPage = {}, uiState.value.currentUrl)
+        innerPadding -> ContentSection(innerPadding = innerPadding, onLoadedPage = viewModel::updateCurrentUrl, uiState.value.currentUrl)
     }
 
 }
@@ -70,16 +70,21 @@ fun ContentSection(innerPadding : PaddingValues, onLoadedPage : (String) -> Unit
 
     //This code is sourced from: https://medium.com/@sahar.asadian90/webview-in-jetpack-compose-71f237873c2e
     AndroidView(
-        modifier = Modifier
-            .padding(innerPadding)
-            .fillMaxHeight(),
+        modifier = Modifier.padding(innerPadding).fillMaxHeight(),
         factory = { context ->
             WebView(context).apply {
                 settings.javaScriptEnabled = true
-                webViewClient = WebViewClient()
                 settings.loadWithOverviewMode = true
                 settings.useWideViewPort = true
                 settings.setSupportZoom(true)
+                webViewClient = object : WebViewClient() {
+                    override fun onPageFinished(view: WebView?, url: String?) {
+                        super.onPageFinished(view, url)
+                        url?.let {
+                            onLoadedPage(it)
+                        }
+                    }
+                }
             }
         },
         update = { webView ->
