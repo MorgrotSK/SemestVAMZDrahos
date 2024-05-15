@@ -1,28 +1,9 @@
 package com.example.semestdrahosvamz.ui.screens.notes
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
@@ -35,10 +16,15 @@ import com.example.semestdrahosvamz.R
 import com.example.semestdrahosvamz.ui.ViewModelProvider
 import kotlinx.coroutines.launch
 
+/**
+ * Composable function to display the book notes screen.
+ *
+ * @param navigateBack Lambda function to handle back navigation.
+ * @param viewModel The ViewModel for managing the state of the Book Notes screen.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookNotesScreen(navigateBack : () -> Unit,  viewModel: NotesViewModel = viewModel(factory = ViewModelProvider.Factory)) {
-
+fun BookNotesScreen(navigateBack: () -> Unit, viewModel: NotesViewModel = viewModel(factory = ViewModelProvider.Factory)) {
     val uiState = viewModel.notesUiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -59,22 +45,31 @@ fun BookNotesScreen(navigateBack : () -> Unit,  viewModel: NotesViewModel = view
                 ),
             )
         },
-
-        ) { innerPadding ->
+    ) { innerPadding ->
         NotesEditor(
             noteText = uiState.value.book.notes,
             onValueChange = viewModel::updateNotesText,
             innerPadding = innerPadding,
             onCancel = navigateBack,
-            onSave = { coroutineScope.launch {
-                viewModel.saveChanges()
-                navigateBack()
-            } }
+            onSave = {
+                coroutineScope.launch {
+                    viewModel.saveChanges()
+                    navigateBack()
+                }
+            }
         )
     }
 }
 
-
+/**
+ * Composable function to display the notes editor.
+ *
+ * @param noteText The current text of the note.
+ * @param onValueChange Lambda function to handle value changes in the text field.
+ * @param innerPadding Padding values for the editor.
+ * @param onSave Lambda function to handle the save action.
+ * @param onCancel Lambda function to handle the cancel action.
+ */
 @Composable
 fun NotesEditor(noteText: String, onValueChange: (String) -> Unit, innerPadding: PaddingValues, onSave: () -> Unit, onCancel: () -> Unit) {
     Column(
@@ -89,26 +84,50 @@ fun NotesEditor(noteText: String, onValueChange: (String) -> Unit, innerPadding:
                 .fillMaxWidth(0.95f)
                 .fillMaxHeight(0.85f)
         ) {
-            TextField(
-                value = noteText,
-                onValueChange = onValueChange,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(8.dp)
-            )
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)) {
+                TextField(
+                    value = noteText,
+                    onValueChange = onValueChange,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f)
+                )
+                NotesTextCounter(
+                    text = noteText,
+                    maxCount = NotesViewModel.MAX_CHAR_COUNT
+                )
+            }
         }
         ControlButtons(onSave = onSave, onCancel = onCancel)
     }
 }
 
+/**
+ * Composable function to display the character count of the notes text.
+ *
+ * @param text The current text of the note.
+ * @param maxCount The maximum allowed character count.
+ */
 @Composable
-fun ControlButtons(onSave : () -> Unit, onCancel : () -> Unit) {
+fun NotesTextCounter(text: String, maxCount: Int) {
+    Text(text = "${text.length} / $maxCount")
+}
+
+/**
+ * Composable function to display the control buttons for saving or canceling note edits.
+ *
+ * @param onSave Lambda function to handle the save action.
+ * @param onCancel Lambda function to handle the cancel action.
+ */
+@Composable
+fun ControlButtons(onSave: () -> Unit, onCancel: () -> Unit) {
     Row {
         Button(onClick = onSave) {
             Text(stringResource(R.string.saveButton))
         }
         Spacer(modifier = Modifier.width(4.dp))
-        
         FilledTonalButton(onClick = onCancel) {
             Text(stringResource(R.string.cancelButton))
         }
