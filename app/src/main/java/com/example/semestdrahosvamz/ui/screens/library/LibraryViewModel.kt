@@ -12,7 +12,7 @@ class LibraryViewModel(bookRepository: BookRepository) : ViewModel(){
 
     init {
         viewModelScope.launch {
-            bookRepository.getAllItemsStream().collect { books ->
+            bookRepository.getAllBooksStream().collect { books ->
                 libraryUiState.value = libraryUiState.value.copy(bookList = books)
             }
         }

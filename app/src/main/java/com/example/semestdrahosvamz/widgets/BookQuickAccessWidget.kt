@@ -1,3 +1,6 @@
+//Sourced from: https://developer.android.com/develop/ui/compose/glance/create-app-widget
+
+
 import android.content.Context
 import androidx.glance.GlanceId
 import androidx.glance.appwidget.GlanceAppWidget

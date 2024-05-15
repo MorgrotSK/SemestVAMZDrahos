@@ -18,7 +18,7 @@ class BookDetailsViewModel (savedStateHandle: SavedStateHandle, private val book
 
     init {
         viewModelScope.launch {
-            bookRepository.getItemStream(bookId).collect { book ->
+            bookRepository.getBookStream(bookId).collect { book ->
                 if (book != null) {
                     uiState.value = BookDetailsUiState(book = book)
                 } else {
@@ -38,7 +38,7 @@ class BookDetailsViewModel (savedStateHandle: SavedStateHandle, private val book
             val currentBook = uiState.value.book
             if (currentBook != null) {
                 val updatedBook = currentBook.copy(status = newStatus)
-                bookRepository.updateItem(updatedBook)
+                bookRepository.updateBook(updatedBook)
                 uiState.value = uiState.value.copy(book = updatedBook)
             }
         }
@@ -55,7 +55,7 @@ class BookDetailsViewModel (savedStateHandle: SavedStateHandle, private val book
         viewModelScope.launch {
             val currentBook = uiState.value.book
             if (currentBook != null) {
-                bookRepository.deleteItem(currentBook)
+                bookRepository.deleteBook(currentBook)
             }
         }
     }

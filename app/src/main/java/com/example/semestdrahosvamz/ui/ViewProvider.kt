@@ -1,3 +1,5 @@
+//This code is sourced from the clas materials
+
 package com.example.semestdrahosvamz.ui
 
 import android.app.Application
@@ -19,19 +21,19 @@ object ViewModelProvider {
 
         // Initializer for LibraryViewModel
         initializer {
-            LibraryViewModel(inventoryApplication().container.bookRepository)
+            LibraryViewModel(libraryApplication().container.bookRepository)
         }
         initializer {
-            BookEntryViewModel(inventoryApplication().container.bookRepository, inventoryApplication())
+            BookEntryViewModel(libraryApplication().container.bookRepository, libraryApplication())
         }
         initializer {
-            BookDetailsViewModel(this.createSavedStateHandle(), inventoryApplication().container.bookRepository, inventoryApplication())
+            BookDetailsViewModel(this.createSavedStateHandle(), libraryApplication().container.bookRepository, libraryApplication())
         }
         initializer {
-            NotesViewModel(this.createSavedStateHandle(), inventoryApplication().container.bookRepository)
+            NotesViewModel(this.createSavedStateHandle(), libraryApplication().container.bookRepository)
         }
         initializer {
-            ReaderScreenViewModel(this.createSavedStateHandle(), inventoryApplication().container.bookRepository)
+            ReaderScreenViewModel(this.createSavedStateHandle(), libraryApplication().container.bookRepository)
         }
 
     }
@@ -39,7 +41,7 @@ object ViewModelProvider {
 
 /**
  * Extension function to queries for [Application] object and returns an instance of
- * [InventoryApplication].
+ * [LibaryApplication].
  */
-fun CreationExtras.inventoryApplication(): LibraryApplication =
+fun CreationExtras.libraryApplication(): LibraryApplication =
     (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as LibraryApplication)

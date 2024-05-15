@@ -241,7 +241,7 @@ fun BookEntryFormPortrait(
 
 /**
  * Composable function to display a selectable image.
- *
+ * Partially sourced from: https://www.geeksforgeeks.org/how-to-display-image-from-image-file-path-in-android-using-jetpack-compose/
  * @param bookTitle The title of the book.
  * @param bookLink The link to the book.
  * @param bookImageUri The URI of the book's cover image.

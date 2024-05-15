@@ -1,31 +1,17 @@
-/*
- * Copyright (C) 2023 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+//This code is sourced from the class materials
 
 package com.example.semestdrahosvamz.Data
 
 import kotlinx.coroutines.flow.Flow
 
 class OfflineIBookRepository(private val itemDao: BookDao) : BookRepository{
-    override fun getAllItemsStream(): Flow<List<Book>> = itemDao.getAllBooks()
+    override fun getAllBooksStream(): Flow<List<Book>> = itemDao.getAllBooks()
 
-    override fun getItemStream(id: Int): Flow<Book> = itemDao.getBook(id)
+    override fun getBookStream(id: Int): Flow<Book> = itemDao.getBook(id)
 
-    override suspend fun insertItem(item: Book) : Long = itemDao.insert(item)
+    override suspend fun insertBook(item: Book) : Long = itemDao.insert(item)
 
-    override suspend fun deleteItem(item: Book) = itemDao.delete(item)
+    override suspend fun deleteBook(item: Book) = itemDao.delete(item)
 
-    override suspend fun updateItem(item: Book) = itemDao.update(item)
+    override suspend fun updateBook(item: Book) = itemDao.update(item)
 }

@@ -1,3 +1,5 @@
+//Sourced from: https://developer.android.com/develop/ui/compose/glance/create-app-widget
+
 package com.example.semestdrahosvamz.widgets
 
 import QuickAccessWidget

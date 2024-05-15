@@ -15,7 +15,7 @@ class ReaderScreenViewModel(savedStateHandle: SavedStateHandle, private val book
 
     init {
         viewModelScope.launch {
-            bookRepository.getItemStream(bookId).collect() { book ->
+            bookRepository.getBookStream(bookId).collect() { book ->
                 if (book != null) {
                     uiState.value = ReaderUIState(book = book, currentUrl = if (book.bookMarkUrl != "") book.bookMarkUrl else book.link)
                 } else {
@@ -38,7 +38,7 @@ class ReaderScreenViewModel(savedStateHandle: SavedStateHandle, private val book
 
     fun updateBookMark() {
         viewModelScope.launch {
-            bookRepository.updateItem(uiState.value.book)
+            bookRepository.updateBook(uiState.value.book)
 
         }
     }
